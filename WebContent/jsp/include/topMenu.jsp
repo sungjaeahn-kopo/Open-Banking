@@ -33,12 +33,9 @@
                                     </ul>
                                 </li>
                                 <c:if test="${ empty user }">
-	                                <li><a href="/Open-Banking/login.sj">로그인</a> </li>
+	                                <li><a href="/Open-Banking/loginForm.sj">로그인</a> </li>
                                 </c:if>	
                                 <c:if test="${ not empty user }">
-                                	<%
-                                		session.getMaxInactiveInterval();
-                                	%>
 	                                <li>[${ user.name }님 환영합니다]</li>
 	                                <li><a href="/Open-Banking/logout.sj">로그아웃</a></li>
                                 </c:if>	

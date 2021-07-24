@@ -52,8 +52,5 @@
 	<footer>
 		<jsp:include page="/jsp/include/bottom.jsp"/>
 	</footer>
-
-
-
 </body>
 </html>

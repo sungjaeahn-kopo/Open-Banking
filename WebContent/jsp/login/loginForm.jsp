@@ -63,8 +63,8 @@
 		           var kakaoe_mail = res.kakao_account['email'];    //카카오톡 이메일을 변수에 저장함
 	  
 	          	 //카카오톡의 닉네임과,mail을 url에 담아 같이 페이지를 이동한다.
-	          	 /* window.location.replace("http://" + window.location.hostname + ( (location.port==""||location.port==undefined)?"":":" + location.port) + "/hansub_project/home?kakaonickname="+kakaonickname+"&kakaoe_mail="+kakaoe_mail);
-	        */
+	          	 location.href = '<%=request.getContextPath() %>/loginProcess.sj?kakaoId=' + res.id
+	        
 	                    }
 	                  })
 	                },
@@ -86,7 +86,7 @@
   
   	<section>
   		<div class="login-form">
-			<form action="/Open-Banking/loginForm.sj" method="post" class="form-horizontal" name="login_frm">
+			<form action="/Open-Banking/loginProcess.sj" method="post" class="form-horizontal" name="login_frm">
 				<!-- form 태그 넘길 때 같이 넘길 name=value -->
 				<input type="hidden" name="login_ok" value="1"/>
 				<div class="row">
@@ -110,13 +110,12 @@
 					<div class="form-group row loginbtn">
 							<input type="submit" class="login_submit" name="btn btn-primary btn-lg" accesskey="enter" value="로그인" >
 					</div>
-				
 					<div class="form-group row" id="kakaologin">
 						<a id="kakao-login-btn"></a>
-							<a href="javascript:void(0)"></a>
-						    	<script>
-						    		javascript:kakaoLoginBtn();
-						    	</script>
+						<a href="javascript:void(0)"></a>
+				    	<script>
+				    		javascript:kakaoLoginBtn();
+				    	</script>
 					</div>
 				</div>
 			</form>

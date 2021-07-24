@@ -31,9 +31,8 @@
 <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 <script>
 	Kakao.init('c0ee324b9204956e6ee791dd0445b088'); //발급받은 키 중 javascript키를 사용해준다.
-	console.log(Kakao.isInitialized()); // sdk초기화여부판단
 	//카카오로그인
-	function kakaoLogin() {
+/* 	function kakaoLogin() {
 	    Kakao.Auth.login({
 	      success: function (response) {
 	        Kakao.API.request({
@@ -62,7 +61,7 @@
 	            alert(err);
 	        }
 	    })
-	}
+	} */
 /* 	//카카오로그아웃  
  	function kakaoLogout() {
 		
@@ -115,7 +114,7 @@
 	     location.href="../index.jsp"; 
 	}  */
 	
-	 function logout() {
+/* 	 function logout() {
         if (!Kakao.Auth.getAccessToken()) {
             console.log('Not logged in.');
             return;
@@ -139,7 +138,7 @@
         });
         
         location.href="https://accounts.kakao.com/login?continue=https%3A%2F%2Fkauth.kakao.com%2Foauth%2Fauthorize%3Fproxy%3DeasyXDM_Kakao_v0rj4rf3ybf_provider%26ka%3Dsdk%252F1.40.6%2520os%252Fjavascript%2520sdk_type%252Fjavascript%2520lang%252Fko-KR%2520device%252FWin32%2520origin%252Fhttp%25253A%25252F%25252Flocalhost%25253A9999%26origin%3Dhttp%253A%252F%252Flocalhost%253A9999%26response_type%3Dcode%26redirect_uri%3Dkakaojs%26state%3Dr8xtubaze6hqpqvdtss1v9%26client_id%3Dc0ee324b9204956e6ee791dd0445b088";
-    }
+    } */
 	 
 </script>
 </head>

@@ -40,13 +40,13 @@
 	
 	                <h3>계좌비밀번호</h3>
 	                <span class="signup-input">
-	                    <input id="signup-pw" type="text" name="password"></input>
+	                    <input id="signup-pw" type="password" name="password"></input>
 	                    <span class="pw-lock"></span>
 	                </span>
 	
 	                <h3>계좌비밀번호 재확인</h3>
 	                <span class="signup-input">
-	                    <input id="signup-pww" type="text" name="re_password"></input>
+	                    <input id="signup-pww" type="password" name="re_password"></input>
 	                    <span class="pww-lock"></span>
 	                </span>
 	

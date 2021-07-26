@@ -30,7 +30,52 @@
 <!-- 카카오 스크립트 -->
 <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 <script>
-	Kakao.init('c0ee324b9204956e6ee791dd0445b088'); //발급받은 키 중 javascript키를 사용해준다.
+	window.Kakao.init('82c288c3750bc7ab2ec232dd74a11191')
+	
+	
+	if('${transferResult}' != '') {
+		alert('카카오')
+		let money = '${transferResult}'
+		let account_number = '${account_number}'
+		/*
+		Kakao.Auth.authorize({
+		    redirectUri: 'http://localhost:9999/Open-Banking/index.sj',
+		    scope: 'talk_message'
+		});
+		*/
+		Kakao.API.request({
+		  url: '/v2/api/talk/memo/default/send',
+		  data: {
+		    template_object: {
+		      object_type: 'feed',
+		      content: {
+		        title: 'SJ뱅크 계좌이체 성공',
+		        description: '계좌번호 ' + account_number + '로' + money + '원이 이체되었습니다.',
+		        image_url:
+		          'https://dimg.donga.com/wps/NEWS/IMAGE/2021/06/29/107689623.2.jpg',
+		        link: {
+		          web_url: 'https://developers.kakao.com',
+		          mobile_web_url: 'https://developers.kakao.com',
+		        },
+		      },
+		      social: {
+		        like_count: 100,
+		        comment_count: 200,
+		      },
+		      button_title: '바로 확인',
+		    },
+		  },
+		  success: function(response) {
+		    console.log(response);
+		  },
+		  fail: function(error) {
+		    console.log(error);
+		  },
+		});
+	} //if문
+	
+	
+	
 	//카카오로그인
 /* 	function kakaoLogin() {
 	    Kakao.Auth.login({
@@ -62,7 +107,7 @@
 	        }
 	    })
 	} */
-/* 	//카카오로그아웃  
+/* //카카오로그아웃  
  	function kakaoLogout() {
 		
 		Kakao.init(kakaoKey);	// 초기화
@@ -86,7 +131,7 @@
 	    	console.log(Kakao.Auth.getAccessToken());
 	    });
 	    
-	};  */
+	};   */
 	
 	 /*    
 	function kakaoLogout(){
@@ -170,7 +215,7 @@
 										    	
 								    	</C:if> --%>
 					        		
-									      <!-- <a href="javascript:logout()">
+									     <!--  <a href="javascript:logout()">
 									      
 									      	<script>
 									      		location.assign('http://localhost:9999/Open-Banking/index.jsp');

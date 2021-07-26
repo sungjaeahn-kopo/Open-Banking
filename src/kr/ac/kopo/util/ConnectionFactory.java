@@ -13,9 +13,9 @@ public class ConnectionFactory {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			
 			// 2단계 DB 접속
-			String url = "jdbc:oracle:thin:@192.168.119.119:1521:dink";
-			String user = "scott";
-			String password = "tiger";
+			String url = "jdbc:oracle:thin:@192.168.217.202:1521/KOPODA";
+			String user = "da2118";
+			String password = "da18";
 			
 			conn = DriverManager.getConnection(url, user, password);		
 			

@@ -22,12 +22,17 @@ public class SignupProcessController implements Controller {
 		member.setPassword(request.getParameter("password"));
 		member.setPhoneNo(request.getParameter("phone"));
 		member.setKakaoId((String)session.getAttribute("kakaoId"));
+		System.out.println("세션 카카오: " + session.getAttribute("kakaoId"));
 		
 		// text 상자에 입력받은 값 db에 저장시키기
-		dao.kakaoSignup(member);
+		boolean result = dao.kakaoSignup(member);
+		if(result)
+			System.out.println("회원가입 성공!");
+		else 
+			System.out.println("중복!!");
 		session.invalidate();
 		
-		return "/loginForm.sj";
+		return "redirect:/jsp/login/loginForm.jsp";
 	}
 	
 }

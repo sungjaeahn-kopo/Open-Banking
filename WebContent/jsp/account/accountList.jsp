@@ -13,6 +13,19 @@
 <link rel="stylesheet" href="/Open-Banking/css/layout.css" />
 <link rel="stylesheet" href="/Open-Banking/css/board.css" />
 <script src="http://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+	function doAction(accountno) {
+		<c:choose>
+			<c:when test="${ not empty user }">
+				location.href = 'transactionDetails.sj?accountno=' + accountno;
+			</c:when>
+			<c:otherwise>
+				if(confirm('로그인이 필요한 서비스입니다\n 로그인페이지로 이동하시겠습니까?'))
+					location.href = "/Open-Banking/jsp/login/loginForm.sj"
+			</c:otherwise>
+		</c:choose>
+	}
+</script>
 </head>
 <body>
 	<header>
@@ -36,7 +49,11 @@
 					<c:forEach items="${ list }" var="account" varStatus="loop">
 						<tr>
 							<td>${ account.bankCode }</td>
-							<td>${ account.accountNo }</td>
+							<td>
+								<a href="javascript:doAction('${ account.accountNo }')">
+									<c:out value="${ account.accountNo }"/>
+								</a>
+							</td>
 							<td>${ account.alias }</td>
 							<td>${ account.id }</td>
 							<td>${ account.date }</td>
@@ -44,9 +61,6 @@
 					</c:forEach>
 				</table>	
 				<br>
-				<c:if test="${ not empty userVO }">
-					<button id="addBtn">새글등록</button>
-				</c:if>	
 			</div>
 		</section>
 	<footer>

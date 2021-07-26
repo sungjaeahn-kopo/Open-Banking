@@ -29,7 +29,6 @@
                                         <li><a href="/Open-Banking/openAccount.sj" title="계좌개설">Open an account</a></li>
                                         <li><a href="/Open-Banking/accountList.sj" title="계좌목록">Account List</a></li>
                                         <li><a href="/Open-Banking/accountTransfer.sj" title="계좌이체">Account Transfer</a></li>
-                                        <li><a href="/Open-Banking/transactionDetails.sj" title="거래내역">Transaction Details</a></li>
                                     </ul>
                                 </li>
                                 <c:if test="${ empty user }">

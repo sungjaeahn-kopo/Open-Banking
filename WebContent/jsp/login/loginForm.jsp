@@ -22,6 +22,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 <script>
 
@@ -37,7 +38,7 @@
 		return true
 	}    
     
-	window.Kakao.init('c0ee324b9204956e6ee791dd0445b088');
+	window.Kakao.init('82c288c3750bc7ab2ec232dd74a11191');
 	
 	function kakaoLoginBtn(){
 		Kakao.Auth.createLoginButton({
@@ -48,7 +49,7 @@
 	                url: '/v2/user/me',
 	  
 	                success: function(res) { //res가 참일때, 자료를 성공적으로 보냈을때 출력되는 부분
-	  
+	  						alert(res.id)
 	                      console.log(res.id);//<---- 콘솔 로그에 id 정보 출력(id는 res안에 있기 때문에  res.id 로 불러온다)
 	  
 	                      console.log(res.kakao_account['email']);//<---- 콘솔 로그에 email 정보 출력 (어딨는지 알겠죠?)
@@ -112,6 +113,7 @@
 					</div>
 					<div class="form-group row" id="kakaologin">
 						<a id="kakao-login-btn"></a>
+						<p id="token-result"></p>
 						<a href="javascript:void(0)"></a>
 				    	<script>
 				    		javascript:kakaoLoginBtn();
@@ -122,7 +124,7 @@
 			
 			<!-- 카카오메일 넘기기 -->
 			<div class="text-center">비밀번호가 기억나지 않습니까? <a href="./pwFindForm.sj">비밀번호 찾기</a></div>
-			<div class="text-center">아직 회원이 아니십니까? <a href="./singupForm.sj">회원가입</a></div>
+			<div class="text-center">아직 회원이 아니십니까? <a href="/Open-Banking/signup.sj">회원가입</a></div>
   		</div>
   	</section>
   

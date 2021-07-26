@@ -26,7 +26,7 @@ public class OpenAccountController implements Controller {
 		
 		dao.openAccount(member.getId(), alias, accountNo, password);
 		
-		return "redirect:/";
+		return "redirect:/jsp/account/openAccount.jsp";
 	}
 	
 }

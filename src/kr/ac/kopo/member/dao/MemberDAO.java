@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import javax.servlet.http.HttpSession;
-
 import kr.ac.kopo.member.vo.MemberVO;
 import kr.ac.kopo.util.ConnectionFactory;
 
@@ -56,6 +54,7 @@ public class MemberDAO {
 				user.setId(rs.getString("banking_id")); 
 				user.setPassword(rs.getString("password"));
 				user.setName(rs.getString("name"));
+				user.setPhoneNo(rs.getString("phone_no"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -64,7 +63,8 @@ public class MemberDAO {
 		return user;
 	}
 	
-	public void kakaoSignup(MemberVO member) {
+	public boolean kakaoSignup(MemberVO member) {
+		boolean result=false;
 		StringBuilder sql = new StringBuilder();
 		
 		sql.append(" insert into banking_login(banking_id, name, password, phone_no, kakao_id) ");
@@ -78,11 +78,16 @@ public class MemberDAO {
 			pstmt.setString(3, member.getPassword());
 			pstmt.setString(4, member.getPhoneNo());
 			pstmt.setString(5, member.getKakaoId());
-			pstmt.executeUpdate();
+			
+			int row = pstmt.executeUpdate();
+			
+			if(row != 0)
+				result = true;
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+		return result;
 	}
 	
 }

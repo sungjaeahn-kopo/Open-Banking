@@ -4,7 +4,7 @@ public class TransactionVO {
 
 	private String transNo;
 	private String transAccountNo;
-	private int amount;
+	private String amount;
 	private String toAccountNo;
 	private String toName;
 	private String transDate;
@@ -23,10 +23,10 @@ public class TransactionVO {
 	public void setTransAccountNo(String transAccountNo) {
 		this.transAccountNo = transAccountNo;
 	}
-	public int getAmount() {
+	public String getAmount() {
 		return amount;
 	}
-	public void setAmount(int amount) {
+	public void setAmount(String amount) {
 		this.amount = amount;
 	}
 	public String getToAccountNo() {

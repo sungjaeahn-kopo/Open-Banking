@@ -103,7 +103,7 @@ public class AccountDAO {
 		return account;
 	}
 	// list는 돈 빠져나가는 계좌
-	public Map<String, String> transferPro(AccountVO account, String name, String accountNo, String bankName, String owner, String amount) {
+	public Map<String, String> transferPro(AccountVO account, String name, TransactionVO trans) {
 		//출금
 		StringBuilder sql = new StringBuilder();
 		StringBuilder sql2 = new StringBuilder();
@@ -111,16 +111,16 @@ public class AccountDAO {
 		sql.append(" {call transfer(?, ?, ?, ?, ?)} ");
 		
 		// yr bank
-		if(accountNo.startsWith("016")) {
+		if(trans.getToAccountNo().startsWith("016")) {
 			sql2.append(" {call transfer@yrbank_link(?, ?, ?, ?, ?)} ");
 			
 		// sw bank	
-		} else if (accountNo.startsWith("032")) {
+		} else if (trans.getToAccountNo().startsWith("032")) {
 			sql2.append(" {call transfer@swbank_link(?, ?, ?, ?, ?)} ");
 			
 		// sj bank	
-		} else if (accountNo.startsWith("094")) {
-			sql.append(" {call transfer(?, ?, ?, ?, ?)} ");
+		} else if (trans.getToAccountNo().startsWith("094")) {
+			sql2.append(" {call transfer(?, ?, ?, ?, ?)} ");
 			
 		// jh bank	
 		} else {
@@ -135,55 +135,56 @@ public class AccountDAO {
 				CallableStatement cstmt1 = conn.prepareCall(sql.toString());
 				CallableStatement cstmt = conn.prepareCall(sql2.toString());
 
-				cstmt1.setString(1, accountNo);
-				cstmt1.setString(2, "-" + amount);
-				cstmt1.setString(3, bankName);
-				cstmt1.setString(4, owner);
+				cstmt1.setString(1, trans.getToAccountNo());
+				cstmt1.setString(2, "-" + trans.getAmount());
+				cstmt1.setString(3, trans.getBankName());
+				cstmt1.setString(4, trans.getToName());
 				cstmt1.setString(5, account.getAccountNo());
 				cstmt1.executeUpdate();
 				
-				cstmt.setString(1, account.getAccountNo());
-				cstmt.setString(2, amount);
-				cstmt.setString(3, account.getBankCode());
-				cstmt.setString(4, name);
-				cstmt.setString(5, accountNo);
-				cstmt.executeUpdate();
+				if(!trans.getToAccountNo().equals(account.getAccountNo())) {
+					cstmt.setString(1, account.getAccountNo());
+					cstmt.setString(2, trans.getAmount());
+					cstmt.setString(3, account.getBankCode());
+					cstmt.setString(4, name);
+					cstmt.setString(5, trans.getToAccountNo());
+					cstmt.executeUpdate();
+				}
 				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			map.put("money", amount);
-			map.put("account_number", accountNo);
+			map.put("money", trans.getAmount());
+			map.put("account_number", trans.getToAccountNo());
 			return map;
 	}
 	
 	public List<TransactionVO> transferDetails(String accountNo) {
 		// 선택 은행 + 세션 계정 + 선택 계좌에 대한 거래내역 조회
 		StringBuilder sql = new StringBuilder();
-		TransactionVO trans = new TransactionVO();
 		List<TransactionVO> list = new ArrayList<>();
 		
 		// yr bank
 		if(accountNo.startsWith("016")) {
 			sql.append(" select transaction_no, transaction_code, my_acc_no, trans_money,  ");
 			sql.append(" balance, others_name, others_bank_name, others_acc_no, transaction_date ");
-			sql.append(" from transaction_history@yrbank_link where my_acc_no = ? ");
+			sql.append(" from transaction_history@yrbank_link where my_acc_no = ? order by transaction_no desc ");
 			
 		// sw bank	
 		} else if (accountNo.startsWith("032")) {
 			sql.append(" select tran_idx , tran_myaccount, tran_account, tran_type, tran_amount, ");
 			sql.append(" tran_date, tran_mybalance, tran_bankname, tran_holder ");
-			sql.append(" from transaction_history@swbank_link where tran_account = ? ");
+			sql.append(" from transaction_history@swbank_link where tran_account = ? order by tran_idx desc ");
 			
 		// sj bank	
 		} else if (accountNo.startsWith("094")) {
 			sql.append(" select trans_no, my_account_no, amount, to_account_no, to_name, trans_date, ");
-			sql.append(" bank_name, my_balance from transaction_details where my_account_no = ? ");
+			sql.append(" bank_name, my_balance from transaction_details where my_account_no = ? order by trans_no desc ");
 			
 		// jh bank	
 		} else {
 			sql.append(" select no, transdate, accountno, TRANSACCOUNTNO, amount, balance, debit, ");
-			sql.append(" transbank, transname from t_statement@bank_link where accountno = ? ");
+			sql.append(" transbank, transname from t_statement@bank_link where accountno = ? order by no desc ");
 			
 		}
 		
@@ -196,15 +197,21 @@ public class AccountDAO {
 			
 				// yr bank
 				if(accountNo.startsWith("016")) {
-					sql.append(" select transaction_no, transaction_code, my_acc_no, trans_money, ");
-					sql.append(" balance, others_name, others_bank_name, others_acc_no, transaction_date ");
-					sql.append(" from transaction_history@yrbank_link where my_acc_no = ? ");
-					
+					/*
+					 * sql.
+					 * append(" select transaction_no, transaction_code, my_acc_no, trans_money, ");
+					 * sql.
+					 * append(" balance, others_name, others_bank_name, others_acc_no, transaction_date "
+					 * ); sql.
+					 * append(" from transaction_history@yrbank_link where my_acc_no = ? order by transaction_no desc "
+					 * );
+					 */
 					while(rs.next()) {
+						TransactionVO trans = new TransactionVO();
 						trans.setTransNo(rs.getString("transaction_no"));
 						trans.setTransAccountNo(rs.getString("my_acc_no"));
 						// 보낸 금액
-						trans.setAmount(rs.getInt("trans_money"));
+						trans.setAmount(rs.getString("trans_money"));
 						trans.setBalance(rs.getInt("balance"));
 						trans.setToName(rs.getString("others_name"));
 						trans.setBankName(rs.getString("others_bank_name"));
@@ -216,16 +223,21 @@ public class AccountDAO {
 						
 					// sw bank	
 				} else if (accountNo.startsWith("032")) {
-					sql.append(" select tran_idx , tran_myaccount, tran_account, tran_type, tran_amount, ");
-					sql.append(" tran_date, tran_mybalance, tran_bankname, tran_holder ");
-					sql.append(" from transaction_history@swbank_link where tran_account = ? ");
-					
+					/*
+					 * sql.
+					 * append(" select tran_idx , tran_myaccount, tran_account, tran_type, tran_amount, "
+					 * ); sql.append(" tran_date, tran_mybalance, tran_bankname, tran_holder ");
+					 * sql.
+					 * append(" from transaction_history@swbank_link where tran_account = ? order by tran_idx desc "
+					 * );
+					 */
 					while(rs.next()) {
+						TransactionVO trans = new TransactionVO();
 						trans.setTransNo(rs.getString("tran_idx"));
 						trans.setTransAccountNo(rs.getString("tran_myaccount"));
 						trans.setToAccountNo(rs.getString("tran_account"));
 						// 보낸 금액
-						trans.setAmount(rs.getInt("tran_amount"));
+						trans.setAmount(rs.getString("tran_amount"));
 						trans.setBalance(rs.getInt("tran_mybalance"));
 						trans.setToName(rs.getString("tran_holder"));
 						trans.setBankName(rs.getString("tran_bankname"));
@@ -236,14 +248,19 @@ public class AccountDAO {
 
 					// sj bank	
 				} else if (accountNo.startsWith("094")) {
-					sql.append(" select trans_no, my_account_no, amount, to_account_no, to_name, trans_date, ");
-					sql.append(" bank_name, my_balance from transaction_details where my_account_no = ? ");
-
+					/*
+					 * sql.
+					 * append(" select trans_no, my_account_no, amount, to_account_no, to_name, trans_date, "
+					 * ); sql.
+					 * append(" bank_name, my_balance from transaction_details where my_account_no = ? order by trans_no desc "
+					 * );
+					 */
 					while(rs.next()) {
+						TransactionVO trans = new TransactionVO();
 						trans.setTransNo(rs.getString("trans_no"));
 						trans.setTransAccountNo(rs.getString("my_account_no"));
 						// 보낸 금액
-						trans.setAmount(rs.getInt("amount"));
+						trans.setAmount(rs.getString("amount"));
 						trans.setToAccountNo(rs.getString("to_account_no"));
 						trans.setBalance(rs.getInt("my_balance"));
 						trans.setToName(rs.getString("to_name"));
@@ -255,14 +272,19 @@ public class AccountDAO {
 					
 					// jh bank	
 				} else {
-					sql.append(" select no, transdate, accountno, TRANSACCOUNTNO, amount, balance, debit, ");
-					sql.append(" transbank, transname from t_statement@bank_link where accountno = ? ");
-					
+					/*
+					 * sql.
+					 * append(" select no, transdate, accountno, TRANSACCOUNTNO, amount, balance, debit, "
+					 * ); sql.
+					 * append(" transbank, transname from t_statement@bank_link where accountno = ? order by no desc "
+					 * );
+					 */
 					while(rs.next()) {
+						TransactionVO trans = new TransactionVO();
 						trans.setTransNo(rs.getString("no"));
 						trans.setTransAccountNo(rs.getString("accountno"));
 						// 보낸 금액
-						trans.setAmount(rs.getInt("amount"));
+						trans.setAmount(rs.getString("amount"));
 						trans.setToAccountNo(rs.getString("TRANSACCOUNTNO"));
 						trans.setBalance(rs.getInt("balance"));
 						trans.setToName(rs.getString("transname"));

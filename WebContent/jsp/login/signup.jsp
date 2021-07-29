@@ -19,6 +19,19 @@
 	<link rel="stylesheet" href="/Open-Banking/css/board.css" />
 	<script src="/Open-Banking/js/main.js"></script>
 	<script src="/Open-Banking/js/jquery-3.6.0.min.js"></script>
+	<script>
+		$(".send-mail").click(function() {	// 메일 입력 유효성 검사
+		
+			
+			
+		})
+		
+		
+		
+	
+	
+	
+	</script>
 </head>
 <body>
 	<header>
@@ -67,7 +80,7 @@
 	                        <input id="signup-phone" type="text" placeholder="전화번호 입력" name="phone"></input>
 	                    </span>
 	                    <span class="cnum-btn-wrap">
-	                        <button id="cnum-btn">인증번호 받기</button>
+	                        <button id="send-num">인증번호 받기</button>
 	                    </span>
 	                </div>
 	                

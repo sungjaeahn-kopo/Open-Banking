@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix = "fn" uri = "http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -40,7 +41,15 @@
 						<tr>
 							<td>${ trans.transNo }</td>
 							<td>${ trans.transAccountNo }</td>
-							<td>${ trans.amount }</td>
+							<c:set var="amount" value="${ trans.amount }" />
+							<c:choose>
+							    <c:when test="${ fn:startsWith( amount ,'-') }">
+							        <td style="color : red;">${ trans.amount }</td>
+							    </c:when>
+							    <c:otherwise>
+							        <td style="color : blue;">${ trans.amount }</td>
+							    </c:otherwise>
+							</c:choose>
 							<td>${ trans.toAccountNo }</td>
 							<td>${ trans.toName }</td>
 							<td>${ trans.transDate }</td>

@@ -14,8 +14,6 @@ public class LoginProcessController implements Controller {
 	public String handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// 비교할 카카오계정 아이디값 받아옴
 		String kakaoId = request.getParameter("kakaoId");
-		System.out.println(kakaoId);
-		System.out.println("프로세스");
 		// 일반 로그인 정보 받아옴
 		String id = request.getParameter("id");
 		String pwd = request.getParameter("password");
@@ -47,19 +45,18 @@ public class LoginProcessController implements Controller {
 			// 카카오 로그인일 경우
 		} else {
 			member = dao.confirmKakao(kakaoId);
-			System.out.println("멤버 값 : " + member);
 			// 연동계정 로그인 이력 O
 			if(member != null) { // 메인 페이지로 이동
 				url = "redirect:/index.sj";
 				session.setAttribute("user", member);
+				// 로그인 정보를 모달을 띄우자!!
+				
 				
 			// 연동계정 로그인 이력 X	
-				
 			} else { // 회원가입 페이지로 이동
 				session.setAttribute("kakaoId", kakaoId);
 				url = "redirect:/signup.sj";
 			}
-				
 		}
 		return url;
 	}

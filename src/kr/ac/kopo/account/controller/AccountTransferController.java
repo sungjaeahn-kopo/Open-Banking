@@ -28,6 +28,7 @@ public class AccountTransferController implements Controller {
 		 * System.out.println("세션에서 받아온 객체 : " + member.getId());
 		 * System.out.println("세션에서 받아온 객체 : " + member.getName());
 		 */
+		// 계좌이체
 		AccountVO account = dao.transfer(member.getId());
 		request.setAttribute("account", account);
 		request.setAttribute("list", list);

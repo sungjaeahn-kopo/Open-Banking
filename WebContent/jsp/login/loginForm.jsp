@@ -49,8 +49,18 @@
 	                url: '/v2/user/me',
 	  
 	                success: function(res) { //res가 참일때, 자료를 성공적으로 보냈을때 출력되는 부분
-	  						alert(res.id)
-	                      console.log(res.id);//<---- 콘솔 로그에 id 정보 출력(id는 res안에 있기 때문에  res.id 로 불러온다)
+                		// 모달창으로 로그인 성공 띄우기
+	                	 $(document).ready(function() {
+      					   $('#myModal').show();
+	 					});
+					 	
+	                	//팝업 Close 기능
+					 	function close_pop(flag) {
+					      $('#myModal').hide();
+					 	};	
+	                	
+                	//	alert(res.id)
+	                /*  console.log(res.id);//<---- 콘솔 로그에 id 정보 출력(id는 res안에 있기 때문에  res.id 로 불러온다)
 	  
 	                      console.log(res.kakao_account['email']);//<---- 콘솔 로그에 email 정보 출력 (어딨는지 알겠죠?)
 	  
@@ -58,20 +68,18 @@
 	                              
 	                      // res.properties.nickname으로도 접근 가능 )
 	                      console.log(authObj.access_token);//<---- 콘솔 로그에 토큰값 출력
-	           
-	          
-		           var kakaonickname = res.properties.nickname;    //카카오톡 닉네임을 변수에 저장
-		           var kakaoe_mail = res.kakao_account['email'];    //카카오톡 이메일을 변수에 저장함
-	  
-	          	 //카카오톡의 닉네임과,mail을 url에 담아 같이 페이지를 이동한다.
-	          	 location.href = '<%=request.getContextPath() %>/loginProcess.sj?kakaoId=' + res.id
-	        
-	                    }
-	                  })
-	                },
-	                fail: function(error) { //에러 발생시 에러 메시지를 출력한다.
-	                  alert(JSON.stringify(error));
-	                }
+	           		*/
+			           	var kakaonickname = res.properties.nickname;    //카카오톡 닉네임을 변수에 저장
+			          	var kakaoe_mail = res.kakao_account['email'];    //카카오톡 이메일을 변수에 저장함
+		  
+		          		 //카카오톡의 닉네임과,mail을 url에 담아 같이 페이지를 이동한다.
+		          		 location.href = '<%=request.getContextPath() %>/loginProcess.sj?kakaoId=' + res.id
+                    }
+                  })
+                },
+                fail: function(error) { //에러 발생시 에러 메시지를 출력한다.
+                  alert(JSON.stringify(error));
+                }
 	    })
 	}
     
@@ -79,13 +87,25 @@
   </head>
   <body>
   	<header>
-	  	<!-- 메뉴 바 -->
 	  	<jsp:include page="/jsp/include/topMenu.jsp">
 	  		<jsp:param value="loginForm" name="this"/>
 	  	</jsp:include>
   	</header>
   
   	<section>
+  		<div id="myModal" class="modal">
+		 	<div class="modal-content">
+		       <p><span><b><span style="font-size: 24pt;">로그인 성공</span></b></span></p>
+		       <p><br /></p>
+		       <p><span>SJ Bank 방문을 환영합니다</span></p>
+		       <div class="modal-close" onClick="close_pop();">
+		           <span class="pop_bt" style="font-size: 13pt;" >
+	                닫기
+	               </span>
+               </div>
+	    	</div>
+	    </div>
+  	
   		<div class="login-form">
 			<form action="/Open-Banking/loginProcess.sj" method="post" class="form-horizontal" name="login_frm">
 				<!-- form 태그 넘길 때 같이 넘길 name=value -->

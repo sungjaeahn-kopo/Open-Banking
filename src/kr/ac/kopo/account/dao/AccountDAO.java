@@ -15,15 +15,15 @@ import kr.ac.kopo.util.ConnectionFactory;
 
 public class AccountDAO {
 
-	public List<AccountVO> selectAll(String id) {
+	public List<AccountVO> selectSJBank(String id) {
 		
 		List<AccountVO> list = new ArrayList<>();
 		
 		StringBuilder sql = new StringBuilder();
 		sql.append("select (select bank_name from code_table where bank_code = '094') ");
-		sql.append(" as bank_name, a.accountno, a.alias, a.banking_id, ");
-		sql.append(" a.reg_date from t_account a, code_table c ");
-		sql.append(" where a.bank_code = c.bank_code and a.banking_id=? ");
+		sql.append(" as bank_name, a.accountno, a.alias, b.name, ");
+		sql.append(" a.reg_date from t_account a, banking_login b ");
+		sql.append(" where a.banking_id = b.banking_id and a.banking_id=? ");
 		
 		try {
 			Connection conn = new ConnectionFactory().getConnection();
@@ -37,12 +37,112 @@ public class AccountDAO {
 				account.setBankCode(rs.getString("bank_name"));
 				account.setAccountNo(rs.getString("accountno"));
 				account.setAlias(rs.getString("alias"));
-				account.setId(rs.getString("banking_id"));
+				account.setId(rs.getString("name"));
 				account.setDate(rs.getString("reg_date"));
 				
 				list.add(account);
 			}
 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+	
+	public List<AccountVO> selectJHBank(String name) {
+		
+		List<AccountVO> list = new ArrayList<>();
+		
+		StringBuilder sql = new StringBuilder();
+		sql.append("select bankname, accountno, alias, name, opendate ");
+		sql.append(" from t_account@bank_link where name=? ");
+		try {
+			Connection conn = new ConnectionFactory().getConnection();
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, name);
+			ResultSet rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				AccountVO account = new AccountVO();
+				account.setBankCode(rs.getString("bankname"));
+				account.setAccountNo(rs.getString("accountno"));
+				account.setAlias(rs.getString("alias"));
+				account.setId(rs.getString("name"));
+				account.setDate(rs.getString("opendate"));
+				
+				list.add(account);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+	
+	public List<AccountVO> selectYRBank(String name) {
+		
+		List<AccountVO> list = new ArrayList<>();
+		
+		StringBuilder sql = new StringBuilder();
+		sql.append("select (select bank_name from bank_info@YRbank_link where bank_code = '016') ");
+		sql.append(" as bank_name, accountno, account_nickname, account_owner, ");
+		sql.append(" open_acc_date from t_account@YRbank_link ");
+		sql.append(" where account_owner=? ");
+		
+		try {
+			Connection conn = new ConnectionFactory().getConnection();
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, name);
+			ResultSet rs = pstmt.executeQuery();
+			
+			
+			while(rs.next()) {
+				AccountVO account = new AccountVO();
+				account.setBankCode(rs.getString("bank_name"));
+				account.setAccountNo(rs.getString("accountno"));
+				account.setAlias(rs.getString("account_nickname"));
+				account.setId(rs.getString("account_owner"));
+				account.setDate(rs.getString("open_acc_date"));
+				
+				list.add(account);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+	
+	public List<AccountVO> selectSWBank( String name) {
+		
+		List<AccountVO> list = new ArrayList<>();
+		
+		StringBuilder sql = new StringBuilder();
+		sql.append("select (select bank_name from code_table where bank_code = '032') ");
+		sql.append(" as bank_name, accountno, account_nickname, holder, ");
+		sql.append(" reg_date from t_account@SWbank_link where holder=? ");
+		
+		try {
+			Connection conn = new ConnectionFactory().getConnection();
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, name);
+			ResultSet rs = pstmt.executeQuery();
+			
+			
+			while(rs.next()) {
+				AccountVO account = new AccountVO();
+				account.setBankCode(rs.getString("bank_name"));
+				account.setAccountNo(rs.getString("accountno"));
+				account.setAlias(rs.getString("account_nickname"));
+				account.setId(rs.getString("holder"));
+				account.setDate(rs.getString("reg_date"));
+				
+				list.add(account);
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -350,7 +450,6 @@ public class AccountDAO {
 		
 		return balanceR;
 	}
-	
 	
 	
 }

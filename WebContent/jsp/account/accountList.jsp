@@ -25,6 +25,59 @@
 			</c:otherwise>
 		</c:choose>
 	}
+	
+	$(document).ready(function(){
+		$('#bankCode').change(function(){
+			$.ajax({
+				type : 'get',
+				url : '/Open-Banking/accList.sj',
+				dataType : 'json',
+				data : {
+					bankCode : $("#bankCode option:selected").val()
+				}, 
+				success : function(data) {
+					console.log(data)
+					resultHtml(data);
+				},
+				error : function() {
+					alert("fail")
+				}
+			})
+			
+		})
+	})
+
+	function resultHtml(data) {
+		
+		
+		var html = "<hr width=\"80%\">";
+		html += "<h2>" + value.id + "계좌</h2>";
+		html += "<hr width=\"80%\"><br>";
+		html += "<table border = '1'>";
+		html += "<tr>";
+		html += "<th width=\"10%\">은행명</th>";
+		html += "<th>계좌번호</th>";
+		html += "<th width=\"16%\">별칭</th>";
+		html += "<th>예금주</th>";
+		html += "<th width=\"20%\">생성일</th>";
+		html += "</tr>";
+
+		$.each(data, function(key, value) {
+			html += "<tr align = 'center'>";
+			html += "<td>" + value.bankCode + "</td>";
+			html += '<td><a href="javascript:doAction(' + '\'' +  value.accountNo + '\'' + ')">';
+			html += value.accountNo + "</a>";
+			html += "</td>";
+			html += "<td>" + value.alias + "</td>";
+			html += "<td>" + value.id + "</td>";
+			html += "<td>" + value.date + "</td>";
+			html += "</tr>";
+		});
+
+		html += "</table>";
+		$("#accList").empty();
+		$("#accList").append(html);
+	}
 </script>
 </head>
 <body>
@@ -32,37 +85,22 @@
 		<jsp:include page="/jsp/include/topMenu.jsp"/>
 	</header>
 	<section>
+	<br>
+	<br>
 		<div align="center">
-			<hr width="80%">
-			<h2>계좌 목록</h2>
-			<hr width="80%">
-			<br>
-				<table id="list">
-					<tr>
-						<th width="10%">은행명</th>
-						<th>계좌번호</th>
-						<th width="16%">별칭</th>
-						<th>예금주</th>
-						<th width="20%">생성일</th>
-					</tr>
-					
-					<c:forEach items="${ list }" var="account" varStatus="loop">
-						<tr>
-							<td>${ account.bankCode }</td>
-							<td>
-								<a href="javascript:doAction('${ account.accountNo }')">
-									<c:out value="${ account.accountNo }"/>
-								</a>
-							</td>
-							<td>${ account.alias }</td>
-							<td>${ account.id }</td>
-							<td>${ account.date }</td>
-						</tr>
-					</c:forEach>
-				</table>	
-				<br>
-			</div>
-		</section>
+			조회하고 싶은 은행을 선택하세요 : 
+			<select id = "bankCode" name="items1" >
+					<option value="">---은행선택---</option>
+					<option value="SJ Bank" title="/images/SJBank.png">SJ Bank</option>
+					<option value="JH Bank" title="/images/JHBank.png">JH Bank</option>
+					<option value="YR Bank" title="/images/YRBank.jpg">YR Bank</option>
+					<option value="SW Bank" title="/images/SWBank.jpg">SW Bank</option>
+			</select>
+		</div>
+		<br><br>
+		<div align="center" id="accList">
+		</div>
+	</section>
 	<footer>
 		<jsp:include page="/jsp/include/bottom.jsp"/>
 	</footer>

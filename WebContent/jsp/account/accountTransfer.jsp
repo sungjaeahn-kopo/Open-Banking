@@ -35,7 +35,6 @@
 			
 		})
 	})
-	
 </script>
 </head>
 <body>
@@ -56,16 +55,17 @@
 					</tr>
 
 					<tr>
-						<td><select id = "account" name="items1" >
+						<td>
+							<select id = "account" name="items1" >
 								<c:forEach items="${ list }" var="account" varStatus="loop">
 									<option value="${account.accountNo }">${ account.accountNo }(은행코드
 										: ${ account.bankCode })</option>
 								</c:forEach>
-						</select></td>
+							</select>
+						</td>
 
 						<c:forEach items="${ list }" var="account" varStatus="loop">
-							<td id="bal">
-							</td>
+							<td id="bal" />
 						</c:forEach>
 					</tr>
 				</table>

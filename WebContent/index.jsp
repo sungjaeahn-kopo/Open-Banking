@@ -30,8 +30,7 @@
 	
 	if('${transferResult}' != '') {
 		// 모달 이체완료
-		
-		alert('카카오')
+		alert('이체완료 (카카오 메세지 발송)')
 		let money = '${transferResult}'
 		let account_number = '${account_number}'
 		/*
@@ -80,7 +79,7 @@
       $('#myModal').hide();
  	};
 	
- 	 //Cookie Setting
+ 	//Cookie Setting
     function setCookie(cookie_name, value, days) {
        var exdate = new Date();
        exdate.setDate(exdate.getDate() + days);
@@ -118,7 +117,6 @@
       </c:if>
 	}); */
 
- 	
 </script>
 </head>
 
@@ -131,24 +129,24 @@
     
     <section>
 	    <div id="myModal" class="modal">
-					 	<div class="modal-content">
-					       <p><span><b><span style="font-size: 24pt;">공지</span></b></span></p>
-					       <p><br /></p>
-					       <p><span>사이트 서버 점검으로</span></p>
-					       <p><b><span style="color: rgb(255, 0, 0);">10:00 - 18:00 까지</span></b></p>
-					       <p><span>사이트 사용이 중지 됩니다.</span></p>
-					       <p><span><br /></span></p>
-					       <p><span>이용에 불편을 드린 점 양해를 </span></p>
-					       <p><span>부탁드립니다.</span></p>
-					       <p><br /></p>
-					       <p><br /></p>
-					         <div class="modal-close" onClick="close_pop();">
-					            <span class="pop_bt" style="font-size: 13pt;" >
-					                닫기
-					            </span>
-					         </div>
-					    </div>
-					    </div>
+		 	<div class="modal-content">
+		       <p><span><b><span style="font-size: 24pt;">공지</span></b></span></p>
+		       <p><br /></p>
+		       <p><span>사이트 서버 점검으로</span></p>
+		       <p><b><span style="color: rgb(255, 0, 0);">10:00 - 18:00 까지</span></b></p>
+		       <p><span>사이트 사용이 중지 됩니다.</span></p>
+		       <p><span><br /></span></p>
+		       <p><span>이용에 불편을 드린 점 양해를 </span></p>
+		       <p><span>부탁드립니다.</span></p>
+		       <p><br /></p>
+		       <p><br /></p>
+		         <div class="modal-close" onClick="close_pop();">
+		            <span class="pop_bt" style="font-size: 13pt;" >
+		                닫기
+		            </span>
+		         </div>
+		    </div>
+		</div>
 	    
 	    <div class="hero-section">
 	        <div class="container">

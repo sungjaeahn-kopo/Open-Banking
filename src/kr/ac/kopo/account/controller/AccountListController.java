@@ -19,9 +19,10 @@ public class AccountListController implements Controller {
 		AccountDAO dao = new AccountDAO();
 		MemberVO member = (MemberVO)session.getAttribute("user");
 		
-		List<AccountVO> list = dao.selectAll(member.getId());
+		List<AccountVO> list = dao.selectSJBank(member.getId());
 		
 		request.setAttribute("list", list);
+		System.out.println(list);
 		
 		return "/jsp/account/accountList.jsp";
 	}

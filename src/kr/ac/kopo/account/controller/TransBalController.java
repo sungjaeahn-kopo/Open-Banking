@@ -17,7 +17,5 @@ public class TransBalController implements Controller {
 		request.setAttribute("balance", accountnoR);
 		return "/jsp/account/accountBal.jsp";
 	}
-
-	
 	
 }
